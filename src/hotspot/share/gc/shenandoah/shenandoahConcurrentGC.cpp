@@ -26,6 +26,7 @@
 
 #include "precompiled.hpp"
 
+#include "gc/shared/allocTracer.hpp"
 #include "gc/shared/barrierSetNMethod.hpp"
 #include "gc/shared/collectorCounters.hpp"
 #include "gc/shared/continuationGCSupport.inline.hpp"
@@ -97,6 +98,8 @@ ShenandoahConcurrentGC::ShenandoahConcurrentGC(ShenandoahGeneration* generation,
   _degen_point(ShenandoahDegenPoint::_degenerated_unset),
   _abbreviated(false),
   _do_old_gc_bootstrap(do_old_gc_bootstrap) {
+  // ysr: Fake it till you make it
+  AllocTracer::send_allocation_requiring_gc_event(0, 0); 
 }
 
 ShenandoahGC::ShenandoahDegenPoint ShenandoahConcurrentGC::degen_point() const {

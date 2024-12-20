@@ -145,7 +145,7 @@ public class StressAllocationGCEvents {
         RecordedThread thread = event.getThread();
         String threadName = thread.getJavaName();
 
-        if (!threadName.contains(THREAD_NAME)) {
+        if (threadName != null && !threadName.contains(THREAD_NAME)) {
             System.out.println("Skip event not from pool (from internals)");
             System.out.println(" Thread Id: " + thread.getJavaThreadId()
                     + " Thread name: " + threadName);
@@ -153,9 +153,18 @@ public class StressAllocationGCEvents {
         }
 
         RecordedStackTrace stackTrace = event.getStackTrace();
+        if (stackTrace == null) {
+            System.out.println("Event: " + event);
+            return;
+        }
 
         List<RecordedFrame> frames = stackTrace.getFrames();
         //String[] stacktrace = StackTraceHelper.buildStackTraceFromFrames(frames);
+
+        if (frames == null) {
+            System.out.println("Event: " + event);
+            return;
+        }
 
         if (!(frames.getFirst().getMethod().getName().equals(DIVER_FRAME_NAME))) {
             System.out.println("Skip stacktrace check for: \n"
